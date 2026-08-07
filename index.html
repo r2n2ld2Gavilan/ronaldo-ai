@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RONALDO AI | Asistente Inteligente con Gemini</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Prism CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <!-- Visualización -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <!-- Data Engines -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- FIX: Prism CORE primero, luego los componentes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div class="d-flex h-100 cyber-grid">
+
+  <!-- ===== SIDEBAR ===== -->
+  <div id="sidebar" class="cyber-sidebar p-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="neon-text-blue m-0" style="font-size:0.9rem; letter-spacing:2px;">
+        <i class="fa-solid fa-brain me-2"></i>MEMORIA
+      </h4>
+      <button id="close-sidebar" class="btn cyber-btn-icon" title="Cerrar panel">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="branding-zone mb-3 p-2 text-center">
+      <div style="font-family:var(--font-title); font-size:0.75rem; letter-spacing:2px; color:var(--text-primary);">
+        RONALDO <span class="neon-text-pink">AI</span>
+      </div>
+      <small style="color:var(--text-muted); font-size:0.7rem;">Asistente Inteligente con Gemini</small>
+    </div>
+
+    <hr class="cyber-hr">
+
+    <div class="history-container mb-3">
+      <div style="font-size:0.65rem; color:var(--text-muted); letter-spacing:1px; margin-bottom:6px; font-family:var(--font-title);">
+        SESIONES GUARDADAS
+      </div>
+      <div id="history-list"></div>
+    </div>
+
+    <div class="mt-auto d-flex flex-column gap-2">
+      <button id="btn-download-session" class="btn cyber-btn-blue w-100" style="font-size:0.75rem;">
+        <i class="fa-solid fa-file-export me-1"></i> Exportar Sesión
+      </button>
+      <button id="clear-btn" class="btn cyber-btn-red w-100" style="font-size:0.75rem;">
+        <i class="fa-solid fa-trash-can me-1"></i> PURGAR MEMORIA
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== PANEL PRINCIPAL ===== -->
+  <div class="flex-grow-1 d-flex flex-column cyber-main">
+
+    <!-- HEADER -->
+    <header class="px-3 py-2 d-flex justify-content-between align-items-center cyber-header">
+      <div class="d-flex align-items-center gap-2">
+        <button id="toggle-sidebar" class="btn cyber-btn-icon" title="Mostrar u ocultar memoria">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h2 class="neon-text-pink m-0 d-none d-sm-block" style="font-size:0.9rem; letter-spacing:3px;">
+          <i class="fa-solid fa-brain me-2"></i>RONALDO AI
+        </h2>
+      </div>
+
+      <div class="d-flex align-items-center gap-2" id="header-tools">
+        <div class="model-status" id="model-status">Conectando con Gemini...</div>
+
+        <button id="btn-download-session-mobile" class="btn cyber-btn-icon d-lg-none" title="Exportar sesión">
+          <i class="fa-solid fa-file-export"></i>
+        </button>
+
+        <!-- Alterna entre Cyberpunk y Claro Minimalista -->
+        <button
+          id="theme-toggle"
+          class="btn cyber-btn-icon"
+          type="button"
+          title="Activar modo claro minimalista"
+          aria-label="Activar modo claro minimalista"
+          aria-pressed="false">
+          <i id="theme-icon" class="fa-solid fa-sun"></i>
+        </button>
+
+        <!-- Bocina activa por defecto -->
+        <button id="toggle-audio-global" class="btn cyber-btn-icon active" title="Narrador IA (ON)">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- CHAT BOX -->
+    <div id="chat-box" class="flex-grow-1 overflow-auto" style="padding:16px 20px;">
+      <div class="message system-msg">
+  <div class="msg-content">
+    <i class="fa-solid fa-brain me-2" style="color:var(--neon-blue);"></i>
+    RONALDO AI está listo para ayudarte.<br>
+    <small style="color:var(--text-muted);">
+      Gemini · Voz · Código · Archivos · Análisis de datos
+    </small>
+  </div>
+</div>
+    </div>
+
+    <!-- Preview archivos -->
+    <div id="file-preview-zone" class="px-3 py-2 d-none"></div>
+
+    <!-- INPUT AREA -->
+    <div class="px-3 py-2 cyber-input-area">
+      <form id="chat-form" class="d-flex gap-2 align-items-end">
+
+        <div class="d-flex gap-1 flex-shrink-0">
+          <label for="file-upload" class="btn cyber-btn-icon" title="Adjuntar archivo">
+            <i class="fa-solid fa-paperclip"></i>
+          </label>
+          <input type="file" id="file-upload" multiple class="d-none" accept="*/*">
+          <button type="button" id="stt-btn" class="btn cyber-btn-icon" title="Dictado por voz">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+        </div>
+
+        <textarea
+          id="prompt-input"
+          class="form-control cyber-textarea flex-grow-1"
+          rows="1"
+          placeholder="Escribe tu prompt... (Enter para enviar · Shift+Enter nueva línea)"
+          autocomplete="off"
+          spellcheck="false"></textarea>
+
+        <div class="d-flex gap-1 flex-shrink-0">
+          <button type="button" id="new-chat-btn" class="btn cyber-btn-pink" title="Nueva sesión (historial conservado)">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button type="submit" id="send-btn" class="btn cyber-btn-blue" title="Enviar (Enter)">
+            <i class="fa-solid fa-bolt"></i>
+          </button>
+        </div>
+
+      </form>
+      <div style="font-size:0.62rem; color:var(--text-muted); text-align:right; margin-top:3px;">
+        Enter = enviar &nbsp;·&nbsp; Shift+Enter = nueva línea
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MODAL API KEY ===== -->
+<div class="modal fade" id="proModal" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+    <div class="modal-content cyber-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title neon-text-red" style="font-size:0.9rem; letter-spacing:2px;">
+          <i class="fa-solid fa-key me-2"></i>CONFIGURACIÓN DE GEMINI
+        </h5>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">
+          Ingresa tu API Key de Google Gemini.<br>
+          Obtén una gratis en
+          <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" style="color:var(--neon-blue);">aistudio.google.com</a>
+        </p>
+        <input type="password" id="pro-api-key" class="form-control cyber-input" placeholder="AIza..." autocomplete="off">
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" id="submit-pro-key" class="btn cyber-btn-pink w-100">
+          <i class="fa-solid fa-key me-1"></i> GUARDAR CLAVE
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Marked -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- App principal -->
+<script type="module" src="/main.js"></script>
+
+</body>
+</html>

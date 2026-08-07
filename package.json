@@ -1,0 +1,24 @@
+{
+  "name": "ronaldo-ai",
+  "version": "1.0.0",
+  "description": "Asistente de inteligencia artificial con Google Gemini, voz, análisis de datos, archivos, generación de código y doble interfaz visual.",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "inteligencia-artificial",
+    "gemini",
+    "vite",
+    "javascript",
+    "chatbot",
+    "analisis-de-datos"
+  ],
+  "author": "Ronaldo Abreu",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^8.2.0"
+  }
+}
