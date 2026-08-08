@@ -258,16 +258,15 @@ La API Key no será publicada directamente en GitHub.
 
 ### 📂 GitHub
 
-Pendiente de publicación.
+https://github.com/r2n2ld2Gavilan/ronaldo-ai
 
 ### 🌐 Vercel
 
-Pendiente de publicación.
+https://ronaldo-ai.vercel.app
 
 ### 🎥 Video de demostración
 
-Pendiente de publicación en YouTube.
-
+https://www.youtube.com/watch?v=IRN_goPv0W8
 ---
 
 ## 📚 Aprendizajes
